@@ -1,0 +1,27 @@
+import React, { useState } from 'react';
+import JSONEditor from './JSONEditor';
+import FormPreview from './FormPreview';
+import { validateSchema } from './utils/validateSchema';
+
+const App: React.FC = () => {
+  const [jsonSchema, setJsonSchema] = useState('{}');
+  const [errors, setErrors] = useState<string[]>([]);
+
+  const handleJsonChange = (newJson: string) => {
+    setJsonSchema(newJson);
+    const validationErrors = validateSchema(newJson);
+    setErrors(validationErrors);
+  };
+ return (
+    <div className="app-container">
+      <div className="editor-container">
+        <JSONEditor jsonSchema={jsonSchema} onJsonChange={handleJsonChange} />
+        {errors.length > 0 && <div className="error-messages">{errors.join(', ')}</div>}
+      </div>
+      <div className="form-preview-container">
+        <FormPreview jsonSchema={jsonSchema} />
+      </div>
+    </div>
+  );
+};
+
